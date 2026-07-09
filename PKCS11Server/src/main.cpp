@@ -4,17 +4,18 @@
 #include "TokenManager.h"
 #include "SessionManager.h"
 #include "ObjectManager.h"
+#include "KeyManager.h"
 
 
 int main()
 {
-    PKCS11Library pkcs11library;
+	PKCS11Library pkcs11library;
 
-    pkcs11library.load("C:\\Windows\\System32\\aetpkss1.dll");
-       
-    pkcs11library.initialize();
+	pkcs11library.load("C:\\Windows\\System32\\aetpkss1.dll");
 
-    TokenManager tokenManager(pkcs11library);
+	pkcs11library.initialize();
+
+	TokenManager tokenManager(pkcs11library);
 
 	auto tokens = tokenManager.getTokens();
 
@@ -22,17 +23,22 @@ int main()
 
 	auto session = sessionManager.openSession(tokens[0].slotId);
 
-    sessionManager.login(session, "12345");
+	sessionManager.login(session, "12345");
 
 	ObjectManager objectManager(pkcs11library);
 
-	objectManager.listObjects(session);
+	//objectManager.listObjects(session);
 
-   
+	KeyManager keyManager(pkcs11library);
+
+	keyManager.generateRSAKeyPair(session, "MyKey", "1234");
+
+
 
 	sessionManager.logout(session);
 
 	sessionManager.closeSession(session);
 
-    return 0;
+	return 0;
+
 }
