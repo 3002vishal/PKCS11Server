@@ -40,6 +40,8 @@ public:
 
 	bool printTokenInfo();
 
+	bool printMechanisms(CK_SLOT_ID slotId);
+
 private: 
 
 	HMODULE m_library ;
