@@ -8,7 +8,7 @@ CK_SESSION_HANDLE SessionManager::openSession(CK_SLOT_ID slotId)
     CK_RV rv =
         m_library.functions()->C_OpenSession(
             slotId,
-            CKF_SERIAL_SESSION,
+            CKF_SERIAL_SESSION | CKF_RW_SESSION,
             nullptr,
             nullptr,
             &session);
@@ -17,6 +17,8 @@ CK_SESSION_HANDLE SessionManager::openSession(CK_SLOT_ID slotId)
 	     cout << "C_OpenSession failed with error: " << rv << endl;
 		return CK_INVALID_HANDLE;
 	}
+
+	cout << "Session opened successfully. Session handle: " << session << endl;
 	return session;
 
 	

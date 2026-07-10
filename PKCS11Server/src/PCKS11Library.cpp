@@ -6,6 +6,76 @@ PKCS11Library::PKCS11Library()
 {
 	m_library = nullptr;
 	m_functions = nullptr;
+} 
+
+bool PKCS11Library::printMechanisms(CK_SLOT_ID slotId)
+{
+	CK_ULONG count = 0;
+
+	CK_RV  rv = m_functions->C_GetMechanismList(
+		slotId,
+		nullptr,
+		&count
+	);
+
+	if (rv != CKR_OK)
+	{
+		std::cout << " C_GetMechanismList failed: " << rv << std::endl;
+		return false;
+	}
+
+	std::vector<CK_MECHANISM_TYPE> mechanisms(count);
+
+	rv = m_functions->C_GetMechanismList(
+		slotId,
+		mechanisms.data(),
+		&count
+	);
+
+	if (rv != CKR_OK)
+	{
+		std::cout << "C_GetMechanismList failed: " << rv << std::endl;
+		return false;
+
+	}
+	std::cout << "\nSupported Mechanisms\n";
+	std::cout << "-----------------------------\n";
+
+	for (auto mech : mechanisms)
+	{
+		std::cout << "Mechanism : 0x"
+			<< std::hex
+			<< mech
+			<< std::dec
+			<< std::endl;
+
+		CK_MECHANISM_INFO info;
+
+		rv = m_functions->C_GetMechanismInfo(
+			slotId,
+			mech,
+			&info);
+
+		if (rv == CKR_OK)
+		{
+			std::cout << "   Min Key Size : "
+				<< info.ulMinKeySize << std::endl;
+
+			std::cout << "   Max Key Size : "
+				<< info.ulMaxKeySize << std::endl;
+
+			std::cout << "   Flags        : 0x"
+				<< std::hex
+				<< info.flags
+				<< std::dec
+				<< std::endl;
+		}
+
+		std::cout << std::endl;
+	}
+
+	return true;
+
 }
 
 PKCS11Library::~PKCS11Library()

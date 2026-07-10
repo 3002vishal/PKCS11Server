@@ -27,11 +27,19 @@ int main()
 
 	ObjectManager objectManager(pkcs11library);
 
-	//objectManager.listObjects(session);
+	objectManager.listObjects(session);
+
+	//pkcs11library.printMechanisms(tokens[0].slotId);
+
+
+
+
 
 	KeyManager keyManager(pkcs11library);
 
-	keyManager.generateRSAKeyPair(session, "MyKey", "1234");
+	keyManager.generateRSAKeyPair(session, "MyKey", "MyKey--001");
+
+	objectManager.listObjects(session);
 
 
 
