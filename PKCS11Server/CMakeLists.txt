@@ -12,7 +12,8 @@ add_executable(
     src/ObjectManager.cpp
     src/KeyManager.cpp
     src/CertificateManager.cpp
-)
+    src/ObjectFinder.cpp
+ "include/SignManager.h" "src/SignManager.cpp")
 
 target_include_directories(PKCS11Server PRIVATE
     include
